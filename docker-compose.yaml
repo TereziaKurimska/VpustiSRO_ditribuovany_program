@@ -1,0 +1,22 @@
+version: '3'
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:3.8.0-debian-11-r56'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: 'bitnami/kafka:3.3.1-debian-11-r13'
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=kafka://0.0.0.0:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=kafka:PLAINTEXT
+      - KAFKA_ADVERTISED_LISTENERS=kafka://localhost:9092
+      - KAFKA_INTER_BROKER_LISTENER_NAME=kafka
+      - ALLOW_PLAINTEXT_LISTENER=yes
